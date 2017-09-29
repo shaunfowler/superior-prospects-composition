@@ -37,3 +37,6 @@ services:
 
     # sp_mongo_seed:
     #     image: sp_mongo_seed
+    #     deploy:
+    #         restart_policy:
+    #             condition: none
