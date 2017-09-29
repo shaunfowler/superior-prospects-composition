@@ -12,8 +12,8 @@ services:
 
     sp_client:
         image: sp_client
-        volumes:
-            - ./src/client:/usr/app
+        # volumes:
+        #     - ./src/client:/usr/app
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /"
