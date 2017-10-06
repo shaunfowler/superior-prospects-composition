@@ -20,11 +20,6 @@ services:
 
     sp_server:
         image: shaunfowler/sp_server:latest
-        command: npm run nodemon
-        volumes:
-            - "/Users/Shaun/Workspace/superior-prospects-api:/usr/app"
-        ports:
-            - "4000:4000"
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /api"
