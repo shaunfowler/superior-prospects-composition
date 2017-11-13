@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
     sp_traefik:
         image: traefik:latest
@@ -20,6 +20,11 @@ services:
 
     sp_server:
         image: shaunfowler/sp_server:latest
+        secrets:
+            - sp_client_id
+            - sp_client_secret
+        environment:
+            - API_BASE_URL=http://localhost:8888/api
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /api"
@@ -30,8 +35,8 @@ services:
         image: mongo:latest
         command: mongod --smallfiles
 
-    sp_mongo_seed:
-        image: shaunfowler/sp_mongo_seed:latest
-        deploy:
-            restart_policy:
-                condition: none
+secrets:
+    sp_client_id:
+        external: true
+    sp_client_secret:
+        external: true
