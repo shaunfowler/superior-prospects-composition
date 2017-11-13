@@ -1,0 +1,7 @@
+version: '3.1'
+services:
+  sp_mongo_seed:
+    image: shaunfowler/sp_mongo_seed:latest
+    deploy:
+      restart_policy:
+        condition: none
