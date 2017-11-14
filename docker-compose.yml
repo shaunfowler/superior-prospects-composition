@@ -2,16 +2,19 @@ version: '3.1'
 services:
     sp_traefik:
         image: traefik:latest
-        command: --web --docker --docker.domain=traefik --docker.swarmmode=true --logLevel=DEBUG --entryPoints='Name:http Address::80' --defaultentrypoints=http
+        command: --web --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0" --docker --docker.domain=traefik --docker.swarmmode=true --logLevel=DEBUG --entryPoints='Name:http Address::80' --defaultentrypoints=http
         ports:
             - "8888:80"
-            - "9999:8080"
+            - "8080:8080"
+            - "9999:9999"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /dev/null:/traefik.toml
 
     sp_client:
         image: shaunfowler/sp_client:latest
+        volumes:
+            - "/Users/sow/Workspace/other/superior-prospects/:/usr/app"
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /"
@@ -20,6 +23,11 @@ services:
 
     sp_server:
         image: shaunfowler/sp_server:latest
+        command: npm run nodemon
+        ports:
+            - "4000:4000"
+        volumes:
+            - "/Users/sow/Workspace/other/superior-prospects-api/:/usr/app"
         secrets:
             - sp_client_id
             - sp_client_secret
@@ -34,6 +42,27 @@ services:
     sp_mongo:
         image: mongo:latest
         command: mongod --smallfiles
+
+    prometheus:
+      image: quay.io/prometheus/prometheus:latest
+      ports:
+        - 9090:9090
+      volumes:
+        - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    
+    node-exporter:
+        image: prom/node-exporter:0.12.0rc1
+        ports:
+            - '9100:9100'
+
+    grafana:
+        image: grafana/grafana:3.0.0-beta7
+        environment:
+            - GF_SECURITY_ADMIN_PASSWORD=pass
+        depends_on:
+            - prometheus
+        ports:
+        - "7000:3000"
 
 secrets:
     sp_client_id:
