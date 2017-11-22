@@ -13,8 +13,10 @@ services:
 
     sp_client:
         image: shaunfowler/sp_client:latest
+        ports:
+            - "3000:3000"
         volumes:
-            - "/Users/sow/Workspace/other/superior-prospects/:/usr/app"
+            - "../superior-prospects/:/usr/app"
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /"
@@ -27,7 +29,7 @@ services:
         ports:
             - "4000:4000"
         volumes:
-            - "/Users/sow/Workspace/other/superior-prospects-api/:/usr/app"
+            - "../superior-prospects-api/:/usr/app"
         secrets:
             - sp_client_id
             - sp_client_secret
@@ -52,8 +54,6 @@ services:
     
     node-exporter:
         image: prom/node-exporter:0.12.0rc1
-        ports:
-            - '9100:9100'
 
     grafana:
         image: grafana/grafana:3.0.0-beta7
@@ -62,7 +62,7 @@ services:
         depends_on:
             - prometheus
         ports:
-        - "7000:3000"
+        - "9091:3000"
 
 secrets:
     sp_client_id:

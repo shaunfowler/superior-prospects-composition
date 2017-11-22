@@ -28,6 +28,6 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 
-  - job_name: 'sp-server'
+  - job_name: 'sp_server'
     static_configs:
-      - targets: ['sp-server:4000']
+      - targets: ['sp_server:4000']
