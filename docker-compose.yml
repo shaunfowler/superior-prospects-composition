@@ -5,16 +5,14 @@ services:
         command: --web --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0" --docker --docker.domain=traefik --docker.swarmmode=true --logLevel=DEBUG --entryPoints='Name:http Address::80' --defaultentrypoints=http
         ports:
             - "8888:80"
-            - "8080:8080"
-            - "9999:9999"
+            - "7010:8080"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /dev/null:/traefik.toml
 
     sp_client:
         image: shaunfowler/sp_client:latest
-        ports:
-            - "3000:3000"
+        command: yarn start
         volumes:
             - "../superior-prospects/:/usr/app"
         deploy:
@@ -26,8 +24,6 @@ services:
     sp_server:
         image: shaunfowler/sp_server:latest
         command: npm run nodemon
-        ports:
-            - "4000:4000"
         volumes:
             - "../superior-prospects-api/:/usr/app"
         secrets:
@@ -43,14 +39,14 @@ services:
 
     sp_mongo:
         image: mongo:latest
-        command: mongod --smallfiles
+        command: mongod --smallfiles --bind_ip 0.0.0.0
 
     prometheus:
-      image: quay.io/prometheus/prometheus:latest
-      ports:
-        - 9090:9090
-      volumes:
-        - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+        image: quay.io/prometheus/prometheus:latest
+        ports:
+            - 7020:9090
+        volumes:
+            - "./prometheus.yml:/etc/prometheus/prometheus.yml"
     
     node-exporter:
         image: prom/node-exporter:0.12.0rc1
@@ -62,7 +58,15 @@ services:
         depends_on:
             - prometheus
         ports:
-        - "9091:3000"
+            - "7030:3000"
+
+    portainer:
+        image: portainer/portainer
+        command: -H unix:///var/run/docker.sock
+        ports:
+            - "7040:9000"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
 
 secrets:
     sp_client_id:
