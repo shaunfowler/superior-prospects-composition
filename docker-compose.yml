@@ -5,8 +5,7 @@ services:
         command: --web --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0" --docker --docker.domain=traefik --docker.swarmmode=true --logLevel=DEBUG --entryPoints='Name:http Address::80' --defaultentrypoints=http
         ports:
             - "8888:80"
-            - "8080:8080"
-            - "9999:9999"
+            - "7010:8080"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /dev/null:/traefik.toml
@@ -45,7 +44,7 @@ services:
     prometheus:
         image: quay.io/prometheus/prometheus:latest
         ports:
-            - 9090:9090
+            - 7020:9090
         volumes:
             - "./prometheus.yml:/etc/prometheus/prometheus.yml"
     
@@ -59,13 +58,13 @@ services:
         depends_on:
             - prometheus
         ports:
-            - "9091:3000"
+            - "7030:3000"
 
     portainer:
         image: portainer/portainer
         command: -H unix:///var/run/docker.sock
         ports:
-            - "5922:9000"
+            - "7040:9000"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
 
