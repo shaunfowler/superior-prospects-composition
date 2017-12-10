@@ -15,6 +15,8 @@ services:
         command: yarn start
         volumes:
             - "../superior-prospects/:/usr/app"
+        environment:
+            - CHOKIDAR_USEPOLLING=true
         deploy:
             labels:
                 - "traefik.frontend.rule=PathPrefixStrip: /"
