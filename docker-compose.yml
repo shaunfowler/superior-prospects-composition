@@ -42,6 +42,8 @@ services:
     sp_mongo:
         image: mongo:latest
         command: mongod --smallfiles --bind_ip 0.0.0.0
+        volumes:
+            - "./mongodata/:/data/db"
 
     prometheus:
         image: quay.io/prometheus/prometheus:latest
