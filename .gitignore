@@ -1,5 +1,7 @@
 npm-debug.log
-docker-compose.yml.bkp
 cid
 cs
-mongodata
+persistence/mongodata/*
+!persistence/mongodata/_placeholder
+persistence/portainerdata/*
+!persistence/portainerdata/_placeholder
