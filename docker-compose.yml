@@ -20,6 +20,8 @@ services:
 
     sp_server:
         image: shaunfowler/sp_server:latest
+        volumes:
+            - ./persistence/uploads:/usr/app/uploads
         secrets:
             - sp_client_id
             - sp_client_secret
@@ -45,7 +47,7 @@ services:
             - "./prometheus.yml:/etc/prometheus/prometheus.yml"
     
     node-exporter:
-        image: prom/node-exporter:0.12.0rc1
+        image: prom/node-exporter:latest
 
     grafana:
         image: grafana/grafana:3.0.0-beta7

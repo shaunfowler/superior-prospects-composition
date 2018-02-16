@@ -2,6 +2,6 @@ npm-debug.log
 cid
 cs
 persistence/mongodata/*
-!persistence/mongodata/_placeholder
 persistence/portainerdata/*
-!persistence/portainerdata/_placeholder
+persistence/uploads/*
+
